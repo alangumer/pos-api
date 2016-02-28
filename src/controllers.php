@@ -45,14 +45,25 @@ $app->get('/', function () use ($app) {
 });
 
 
-/* start store */
-$app->get('/store', function () use ($app) {
-  return $app->json( $app['db']->fetchAssoc("SELECT * FROM tc_tienda", array()) );
+/* start stores */
+$app->get('/stores', function () use ($app) {
+  return $app->json( $app['db']->fetchAll("SELECT * FROM Store", array()) );
 });
-/* end store */
+
+$app->get('/stores/{id}', function ($id) use ($app) {
+  return $app->json( $app['db']->fetchAssoc( "SELECT * FROM Store where id = ?", array($id) ) );
+});
+
+$app->put('/stores/edit', function () use ($app) {
+  $data = json_decode( file_get_contents("php://input"), true );
+
+  $app['db']->update( 'Store', $data, array( 'id' => $data['id'] ) );
+  return $app->json( formatResponse( $data['id'] ) );
+});
+/* end stores */
 
 
-/* start customers */
+/* start customersTypes */
 $app->get('/customersTypes', function () use ($app) {
   return $app->json( $app['db']->fetchAll( "SELECT * FROM CustomerType order by id desc", array() ) );
 });
@@ -74,7 +85,7 @@ $app->put('/customersTypes/edit', function () use ($app) {
   $app['db']->update( 'CustomerType', $data, array( 'id' => $data['id'] ) );
   return $app->json( formatResponse( $data['id'] ) );
 });
-/* end customers */
+/* end customersTypes */
 
 
 /* start customers */
