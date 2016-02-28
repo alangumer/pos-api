@@ -212,6 +212,30 @@ $app->put('/providers/edit', function () use ($app) {
 /* end providers */
 
 
+/* start paymentsTypes */
+$app->get('/paymentsTypes', function () use ($app) {
+  return $app->json( $app['db']->fetchAll( "SELECT * FROM PaymentType order by id desc", array() ) );
+});
+
+$app->get('/paymentsTypes/{id}', function ($id) use ($app) {
+  return $app->json( $app['db']->fetchAssoc( "SELECT * FROM PaymentType where id = ?", array($id) ) );
+});
+
+$app->post('/paymentsTypes/add', function () use ($app) {
+  $data = json_decode( file_get_contents("php://input"), true );
+
+  $app['db']->insert('PaymentType', $data);
+  return $app->json( formatResponse( $app['db']->lastInsertId() ) );
+});
+
+$app->put('/paymentsTypes/edit', function () use ($app) {
+  $data = json_decode( file_get_contents("php://input"), true );
+
+  $app['db']->update( 'PaymentType', $data, array( 'id' => $data['id'] ) );
+  return $app->json( formatResponse( $data['id'] ) );
+});
+/* end paymentsTypes */
+
 
 $app->error(function (\Exception $e, $code) use ($app) {
 
