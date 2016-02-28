@@ -80,6 +80,30 @@ $app->put('/customers/edit', function () use ($app) {
 });
 /* end customers */
 
+/* start products */
+$app->get('/products', function () use ($app) {
+  return $app->json( $app['db']->fetchAll( "SELECT p.*, c.name category_name FROM Product p join Category c on c.id = p.category_id order by id desc", array() ) );
+});
+
+$app->get('/products/{id}', function ($id) use ($app) {
+  return $app->json( $app['db']->fetchAssoc( "SELECT * FROM Product where id = ?", array($id) ) );
+});
+
+$app->post('/products/add', function () use ($app) {
+  $data = json_decode( file_get_contents("php://input"), true );
+
+  $app['db']->insert('Product', $data);
+  return $app->json( formatResponse( $app['db']->lastInsertId() ) );
+});
+
+$app->put('/products/edit', function () use ($app) {
+  $data = json_decode( file_get_contents("php://input"), true );
+
+  $app['db']->update( 'Product', $data, array( 'id' => $data['id'] ) );
+  return $app->json( formatResponse( $data['id'] ) );
+});
+/* end products */
+
 
 /* start categories */
 $app->get('/categories', function () use ($app) {
@@ -105,29 +129,30 @@ $app->put('/categories/edit', function () use ($app) {
 });
 /* end categories */
 
-/* start products */
-$app->get('/products', function () use ($app) {
-  return $app->json( $app['db']->fetchAll( "SELECT p.*, c.name category_name FROM Product p join Category c on c.id = p.category_id order by id desc", array() ) );
+
+/* start banks */
+$app->get('/banks', function () use ($app) {
+  return $app->json( $app['db']->fetchAll( "SELECT * FROM Bank order by id desc", array() ) );
 });
 
-$app->get('/products/{id}', function ($id) use ($app) {
-  return $app->json( $app['db']->fetchAssoc( "SELECT * FROM Product where id = ?", array($id) ) );
+$app->get('/banks/{id}', function ($id) use ($app) {
+  return $app->json( $app['db']->fetchAssoc( "SELECT * FROM Bank where id = ?", array($id) ) );
 });
 
-$app->post('/products/add', function () use ($app) {
+$app->post('/banks/add', function () use ($app) {
   $data = json_decode( file_get_contents("php://input"), true );
 
-  $app['db']->insert('Product', $data);
+  $app['db']->insert('Bank', $data);
   return $app->json( formatResponse( $app['db']->lastInsertId() ) );
 });
 
-$app->put('/products/edit', function () use ($app) {
+$app->put('/banks/edit', function () use ($app) {
   $data = json_decode( file_get_contents("php://input"), true );
 
-  $app['db']->update( 'Product', $data, array( 'id' => $data['id'] ) );
+  $app['db']->update( 'Bank', $data, array( 'id' => $data['id'] ) );
   return $app->json( formatResponse( $data['id'] ) );
 });
-/* end products */
+/* end banks */
 
 
 
