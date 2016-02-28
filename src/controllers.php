@@ -53,10 +53,31 @@ $app->get('/store', function () use ($app) {
 
 
 /* start customers */
-$app->get('/customers/types', function () use ($app) {
-  return $app->json( $app['db']->fetchAll( "SELECT * FROM CustomerType", array() ) );
+$app->get('/customersTypes', function () use ($app) {
+  return $app->json( $app['db']->fetchAll( "SELECT * FROM CustomerType order by id desc", array() ) );
 });
 
+$app->get('/customersTypes/{id}', function ($id) use ($app) {
+  return $app->json( $app['db']->fetchAssoc( "SELECT * FROM CustomerType where id = ?", array($id) ) );
+});
+
+$app->post('/customersTypes/add', function () use ($app) {
+  $data = json_decode( file_get_contents("php://input"), true );
+
+  $app['db']->insert('CustomerType', $data);
+  return $app->json( formatResponse( $app['db']->lastInsertId() ) );
+});
+
+$app->put('/customersTypes/edit', function () use ($app) {
+  $data = json_decode( file_get_contents("php://input"), true );
+
+  $app['db']->update( 'CustomerType', $data, array( 'id' => $data['id'] ) );
+  return $app->json( formatResponse( $data['id'] ) );
+});
+/* end customers */
+
+
+/* start customers */
 $app->get('/customers', function () use ($app) {
   return $app->json( $app['db']->fetchAll( "SELECT * FROM Customer order by id desc", array() ) );
 });
