@@ -30,6 +30,14 @@ $app->after(function (Request $request, Response $response) {
   $response->headers->set("Access-Control-Allow-Origin", "*");
   $response->headers->set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
   $response->headers->set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  
+  // if ( $response->headers->get('content') )
+  $content = json_decode( $response->getContent(), true );
+  if ( isset( $content['error'] ) ) {
+    // http://stackoverflow.com/questions/3290182/rest-http-status-codes-for-failed-validation-or-invalid-duplicate
+    $response->setStatusCode( 422 ); // UNPROCESSABLE ENTITY
+  }
+  
 });
 
 //accepting JSON
@@ -58,8 +66,6 @@ $app->mount('/categories', include 'categories.php');
 $app->mount('/banks', include 'banks.php');
 // providers
 $app->mount('/providers', include 'providers.php');
-// paymentsTypes
-$app->mount('/paymentsTypes', include 'paymentsTypes.php');
 // invoices
 $app->mount('/invoices', include 'invoices.php');
 
