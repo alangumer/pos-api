@@ -2,19 +2,6 @@
 
 $invoices = $app['controllers_factory'];
 
-$invoices->get('/debe', function () use ($app) {
-  $sql = "
-  select i.ref, SUM(a.amount) as Owing
-    from Invoice i
-    join Allocation a
-      on a.invoice_id = i.id and i.customer_id = 17
-    group by i.ref
-  having SUM(a.amount) > 0";
-
-  // return $app->json( $app['db']->fetchAssoc( $sql, array() ) );
-  return $app->json( array( 'id' => 'algo' ) );
-});
-
 $invoices->get('/', function () use ($app) {
   return $app->json( $app['db']->fetchAll( "SELECT * FROM Invoice order by id desc", array() ) );
 });

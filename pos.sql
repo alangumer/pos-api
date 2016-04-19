@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 10, 2016 at 09:54 PM
+-- Generation Time: Apr 19, 2016 at 05:09 PM
 -- Server version: 5.6.28-0ubuntu0.14.04.1
 -- PHP Version: 5.5.9-1ubuntu4.14
 
@@ -40,12 +40,15 @@ CREATE TABLE `Allocation` (
 --
 
 INSERT INTO `Allocation` (`id`, `payment_id`, `invoice_id`, `amount`, `type`, `date`) VALUES
-(1, 0, 1, 2330.65, 'receivable', '2016-04-10 23:00:04'),
-(2, 1, 1, -2330.65, 'paid', '2016-04-10 23:00:04'),
-(3, 0, 2, 1344.00, 'receivable', '2016-04-11 00:52:57'),
-(4, 2, 2, -1344.00, 'paid', '2016-04-11 00:52:57'),
-(5, 0, 3, 5052.75, 'receivable', '2016-04-11 00:55:45'),
-(6, 3, 3, -5052.75, 'paid', '2016-04-11 00:55:45');
+(1, 0, 1, 705.00, 'receivable', '2016-04-19 17:57:58'),
+(2, 1, 1, -205.00, 'paid', '2016-04-19 17:57:58'),
+(3, 0, 2, 1000.00, 'receivable', '2016-04-19 18:10:23'),
+(4, 2, 2, -700.00, 'paid', '2016-04-19 18:10:23'),
+(5, 0, 3, 200.00, 'receivable', '2016-04-19 18:12:44'),
+(6, 0, 4, 120.00, 'receivable', '2016-04-19 18:48:46'),
+(7, 0, 5, 355.00, 'receivable', '2016-04-19 18:59:16'),
+(8, 0, 6, 10.00, 'receivable', '2016-04-19 19:02:11'),
+(9, 0, 7, 10.00, 'receivable', '2016-04-19 19:06:41');
 
 -- --------------------------------------------------------
 
@@ -128,7 +131,7 @@ INSERT INTO `Customer` (`id`, `name`, `nit`, `tel`, `address`, `birthdate`, `reg
 (11, 'Luis Enrique Gomez', '89798798798', '7676786', 'Ciudad', '2000-02-10', '2016-02-19 07:27:10', 0, 2),
 (12, 'Amanda', '879879878', '89789798789', 'Santa Rosa', '2016-02-24', '2016-02-19 07:36:24', 0, 1),
 (13, 'Henry', '897897987', '897897897897', 'Ciudad', '2016-02-06', '2016-02-19 07:37:22', 0, 2),
-(14, 'Jeremiassss', '79879879878', '789798798798', 'Ciudad', '2016-02-18', '2016-02-19 08:05:08', 0, 0),
+(14, 'Jeremiassss', '79879879878', '789798798798', 'Ciudad', '2016-02-18', '2016-02-19 08:05:08', 0, 1),
 (15, 'Baldir', '79879877', '56765765', 'Santa Lucia', '2016-02-22', '2016-02-22 03:33:47', 0, 1),
 (16, 'Efrain', '878978978', '897987897', 'Ciudad', '2016-02-10', '2016-02-22 05:09:49', 0, 2),
 (17, 'Nicolas', '7987897', '87786767', 'Ciudad', '2016-02-23', '2016-02-24 07:49:10', 0, 2);
@@ -151,9 +154,9 @@ CREATE TABLE `CustomerType` (
 
 INSERT INTO `CustomerType` (`id`, `name`, `credit_limit`) VALUES
 (1, 'Tipo 1', 1000),
-(2, 'Tipo 2', 200),
-(3, 'Tipo 3', 100),
-(4, 'Tipo 4', 2300);
+(2, 'Tipo 2', 1500),
+(3, 'Tipo 3', 1000),
+(4, 'Tipo 4', 1000);
 
 -- --------------------------------------------------------
 
@@ -163,6 +166,7 @@ INSERT INTO `CustomerType` (`id`, `name`, `credit_limit`) VALUES
 
 CREATE TABLE `Invoice` (
   `id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
   `ref` varchar(20) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -171,10 +175,14 @@ CREATE TABLE `Invoice` (
 -- Dumping data for table `Invoice`
 --
 
-INSERT INTO `Invoice` (`id`, `ref`, `date`) VALUES
-(1, '', '2016-04-10 23:00:04'),
-(2, '', '2016-04-11 00:52:57'),
-(3, '', '2016-04-11 00:55:45');
+INSERT INTO `Invoice` (`id`, `customer_id`, `ref`, `date`) VALUES
+(1, 17, '', '2016-04-19 17:57:58'),
+(2, 17, '', '2016-04-19 18:10:23'),
+(3, 17, '', '2016-04-19 18:12:44'),
+(4, 17, '', '2016-04-19 18:48:46'),
+(5, 17, '', '2016-04-19 18:59:16'),
+(6, 17, '', '2016-04-19 19:02:11'),
+(7, 17, '', '2016-04-19 19:06:41');
 
 -- --------------------------------------------------------
 
@@ -198,15 +206,14 @@ CREATE TABLE `InvoiceDetail` (
 --
 
 INSERT INTO `InvoiceDetail` (`id`, `invoice_id`, `product_id`, `quantity`, `price`, `discount`, `iva`, `total`) VALUES
-(1, 1, 4, 1, 120.00, 0.00, 0.00, 120.00),
-(2, 1, 3, 1, 235.00, 1.00, 0.00, 232.65),
-(3, 1, 2, 2, 989.00, 0.00, 0.00, 1978.00),
-(4, 2, 4, 1, 120.00, 0.00, 0.00, 120.00),
-(5, 2, 3, 1, 235.00, 0.00, 0.00, 235.00),
-(6, 2, 2, 1, 989.00, 0.00, 0.00, 989.00),
-(7, 3, 4, 1, 120.00, 0.00, 0.00, 120.00),
-(8, 3, 3, 1, 235.00, 0.00, 0.00, 235.00),
-(9, 3, 2, 5, 989.00, 5.00, 0.00, 4697.75);
+(1, 1, 3, 3, 235.00, 0.00, 0.00, 705.00),
+(2, 2, 3, 5, 200.00, 0.00, 0.00, 1000.00),
+(3, 3, 3, 1, 200.00, 0.00, 0.00, 200.00),
+(4, 4, 4, 1, 120.00, 0.00, 0.00, 120.00),
+(5, 5, 4, 1, 120.00, 0.00, 0.00, 120.00),
+(6, 5, 3, 1, 235.00, 0.00, 0.00, 235.00),
+(7, 6, 4, 1, 10.00, 0.00, 0.00, 10.00),
+(8, 7, 4, 1, 10.00, 0.00, 0.00, 10.00);
 
 -- --------------------------------------------------------
 
@@ -216,7 +223,6 @@ INSERT INTO `InvoiceDetail` (`id`, `invoice_id`, `product_id`, `quantity`, `pric
 
 CREATE TABLE `Payment` (
   `id` int(11) NOT NULL,
-  `payment_type_id` int(11) NOT NULL,
   `ref` varchar(20) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -226,30 +232,9 @@ CREATE TABLE `Payment` (
 -- Dumping data for table `Payment`
 --
 
-INSERT INTO `Payment` (`id`, `payment_type_id`, `ref`, `amount`, `date`) VALUES
-(1, 1, '', 2330.65, '2016-04-10 23:00:04'),
-(2, 1, '', 1344.00, '2016-04-11 00:52:57'),
-(3, 1, '', 5052.75, '2016-04-11 00:55:45');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `PaymentType`
---
-
-CREATE TABLE `PaymentType` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `PaymentType`
---
-
-INSERT INTO `PaymentType` (`id`, `name`, `status`) VALUES
-(1, 'Efectivo', 1),
-(2, 'Al credito', 1);
+INSERT INTO `Payment` (`id`, `ref`, `amount`, `date`) VALUES
+(1, '', 205.00, '2016-04-19 17:57:58'),
+(2, '', 700.00, '2016-04-19 18:10:23');
 
 -- --------------------------------------------------------
 
@@ -375,12 +360,6 @@ ALTER TABLE `Payment`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `PaymentType`
---
-ALTER TABLE `PaymentType`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `Product`
 --
 ALTER TABLE `Product`
@@ -406,7 +385,7 @@ ALTER TABLE `Store`
 -- AUTO_INCREMENT for table `Allocation`
 --
 ALTER TABLE `Allocation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `Bank`
 --
@@ -431,21 +410,16 @@ ALTER TABLE `CustomerType`
 -- AUTO_INCREMENT for table `Invoice`
 --
 ALTER TABLE `Invoice`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `InvoiceDetail`
 --
 ALTER TABLE `InvoiceDetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `Payment`
 --
 ALTER TABLE `Payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `PaymentType`
---
-ALTER TABLE `PaymentType`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `Product`
